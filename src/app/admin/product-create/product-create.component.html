@@ -1,0 +1,75 @@
+<form class="example-form" (submit)="submit()">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput type="text" name="name" [(ngModel)]="name" required />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Keywords</mat-label>
+    <mat-chip-list #chipList aria-label="Keyword selection" required>
+      <mat-chip
+        *ngFor="let keyword of keywords"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="remove(keyword)"
+      >
+        {{ keyword }}
+        <button matChipRemove *ngIf="removable">
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+      <input
+        matInput
+        placeholder="New keyword..."
+        [formControl]="keywordCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+      />
+    </mat-chip-list>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option
+        *ngFor="let keyword of filteredKeywords | async"
+        [value]="keyword"
+      >
+        {{ keyword }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Bid Amount</mat-label>
+    <input
+      matInput
+      type="number"
+      name="bidAmount"
+      min="1000"
+      [(ngModel)]="bidAmount"
+      required
+    />
+  </mat-form-field>
+
+  <mat-slide-toggle name="status" [(ngModel)]="status" required>
+    On/Off
+  </mat-slide-toggle>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Town</mat-label>
+    <mat-select #town (change)="setTown(town.value)" required>
+      <mat-option *ngFor="let town of towns" [value]="town">
+        {{ town }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Radius [km]</mat-label>
+    <input matInput type="number" name="radius" [(ngModel)]="radius" required />
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button color="primary">Add Product</button>
+</form>
